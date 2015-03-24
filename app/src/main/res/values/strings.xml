@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">MicrosoftLauncher</string>
+
+    <string-array name="quick_launch_apps">
+        <item>com.amazon.kindle</item>
+        <item>com.microsoft.bing</item>
+        <item>com.google.android.youtube</item>
+        <item>com.microsoft.office.powerpoint</item>
+        <item>com.microsoft.amp.apps.bingfinance</item>
+        <item>com.microsoft.amp.apps.bingnews</item>
+    </string-array>
 </resources>
