@@ -58,16 +58,20 @@ public class LauncherActivity extends Activity {
         viewPager = (ViewPager) findViewById(R.id.pager);
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View screen1 = inflater.inflate(R.layout.screen, null,
+        adapter = new ScreenAdapter(LauncherActivity.this);
+
+        View screen1 = inflater.inflate(R.layout.work_screen, null,
                 false);
 
         // Pass results to ViewPagerAdapter Class
-        adapter = new ScreenAdapter(LauncherActivity.this);
         adapter.addScreen(screen1);
         View screen2 = inflater.inflate(R.layout.screen, null,
                 false);
         adapter.addScreen(screen2);
 
+        View screen3 = inflater.inflate(R.layout.personal_screen, null,
+                false);
+        adapter.addScreen(screen3);
         // Binds the Adapter to the ViewPager
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(1);
@@ -76,6 +80,7 @@ public class LauncherActivity extends Activity {
 
         RelativeLayout layout = (RelativeLayout)findViewById(R.id.search_bar);
         LinearLayout screen2Child = (LinearLayout)screen2.findViewById(R.id.screen2);
+        LinearLayout work_chid = (LinearLayout) screen1.findViewById(R.id.work_chid);
 
         for(AppWidgetProviderInfo info : widgetList){
             //To get the google search box
@@ -90,6 +95,14 @@ public class LauncherActivity extends Activity {
 
             if (info.provider.getClassName().equals("com.google.android.keep.homescreenwidget.MemoryAppWidgetProvider")) {
                 addHostView(screen2Child,info);
+            }
+
+            if (info.provider.getClassName().equals("com.android.calendar.widget.CalendarAppWidgetProvider")) {
+                addHostView(work_chid,info);
+            }
+
+            if (info.provider.getClassName().equals("com.acompli.acompli.InboxWidgetProvider")) {
+                addHostView(work_chid,info);
             }
         }
 
