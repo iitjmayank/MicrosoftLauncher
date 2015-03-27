@@ -81,6 +81,7 @@ public class LauncherActivity extends Activity {
         RelativeLayout layout = (RelativeLayout)findViewById(R.id.search_bar);
         LinearLayout screen2Child = (LinearLayout)screen2.findViewById(R.id.screen2);
         LinearLayout work_chid = (LinearLayout) screen1.findViewById(R.id.work_chid);
+        LinearLayout personal_child = (LinearLayout) screen3.findViewById(R.id.personal_child);
 
         for(AppWidgetProviderInfo info : widgetList){
             //To get the google search box
@@ -103,6 +104,14 @@ public class LauncherActivity extends Activity {
 
             if (info.provider.getClassName().equals("com.acompli.acompli.InboxWidgetProvider")) {
                 addHostView(work_chid,info);
+            }
+
+            if (info.provider.getClassName().equals("flipboard.widget.FlipboardWidgetMedium")) {
+                addHostView(personal_child,info);
+            }
+
+            if (info.provider.getClassName().equals("com.facebook.katana.FacebookWidgetProvider")) {
+                addHostView(personal_child,info);
             }
         }
 
