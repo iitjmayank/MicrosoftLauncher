@@ -30,7 +30,7 @@ import java.util.List;
 public class LauncherActivity extends Activity {
 
     ViewPager viewPager;
-    PagerAdapter adapter;
+    ScreenAdapter adapter;
     String[] screens;
     Intent backgroundService;
     @Override
@@ -47,8 +47,17 @@ public class LauncherActivity extends Activity {
         // Locate the ViewPager in viewpager_main.xml
         viewPager = (ViewPager) findViewById(R.id.pager);
 
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View screen1 = inflater.inflate(R.layout.screen, null,
+                false);
+
         // Pass results to ViewPagerAdapter Class
-        adapter = new ScreenAdapter(LauncherActivity.this, screens);
+        adapter = new ScreenAdapter(LauncherActivity.this);
+        adapter.addScreen(screen1);
+        View screen2 = inflater.inflate(R.layout.screen, null,
+                false);
+        adapter.addScreen(screen2);
+
         // Binds the Adapter to the ViewPager
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(1);

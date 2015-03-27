@@ -6,8 +6,12 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by maagarwa on 3/23/2015.
@@ -15,17 +19,20 @@ import android.widget.TextView;
 public class ScreenAdapter extends PagerAdapter{
 
     Context context;
-    String[] screen;
+    List<View> screens = new ArrayList<View>();
     LayoutInflater inflater;
 
-    public ScreenAdapter(Context context, String[] screen) {
+    public ScreenAdapter(Context context) {
         this.context = context;
-        this.screen = screen;
+    }
+
+    public void addScreen(View screen) {
+        screens.add(screen);
     }
 
     @Override
     public int getCount() {
-        return screen.length;
+        return screens.size();
     }
 
     @Override
@@ -39,18 +46,15 @@ public class ScreenAdapter extends PagerAdapter{
         // Declare Variables
         TextView screenName;
 
-
-
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View itemView = inflater.inflate(R.layout.screen, container,
-                false);
+        View itemView = screens.get(position);
 
         // Locate the TextViews in viewpager_item.xml
         screenName = (TextView) itemView.findViewById(R.id.screenName);
 
         // Capture position and set to the TextViews
-        screenName.setText(screen[position]);
+        screenName.setText("Screen" + position);
 
         // Add viewpager_item.xml to ViewPager
         ((ViewPager) container).addView(itemView);
@@ -62,7 +66,6 @@ public class ScreenAdapter extends PagerAdapter{
     public void destroyItem(ViewGroup container, int position, Object object) {
         // Remove viewpager_item.xml from ViewPager
         ((ViewPager) container).removeView((RelativeLayout) object);
-
     }
 
 }
