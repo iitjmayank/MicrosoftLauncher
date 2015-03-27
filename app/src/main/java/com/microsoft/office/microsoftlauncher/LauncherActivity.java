@@ -54,10 +54,6 @@ public class LauncherActivity extends Activity {
         appWidgetManager = AppWidgetManager.getInstance(getBaseContext());
         appWidgetHost = new AppWidgetHost(this, APPWIDGET_HOST_ID);
 
-
-        // Generate sample data
-        screens = new String[] { "Work Screen", "Home Screen", "Personal Screen"};
-
         // Locate the ViewPager in viewpager_main.xml
         viewPager = (ViewPager) findViewById(R.id.pager);
 
@@ -79,7 +75,7 @@ public class LauncherActivity extends Activity {
         List<AppWidgetProviderInfo> widgetList = appWidgetManager.getInstalledProviders();
 
         RelativeLayout layout = (RelativeLayout)findViewById(R.id.search_bar);
-        //LinearLayout screen2Child = (LinearLayout)findViewById(R.id.screen2);
+        LinearLayout screen2Child = (LinearLayout)screen2.findViewById(R.id.screen2);
 
         for(AppWidgetProviderInfo info : widgetList){
             //To get the google search box
@@ -89,7 +85,11 @@ public class LauncherActivity extends Activity {
             }
 
             if(info.provider.getClassName().equals("com.android.alarmclock.DigitalAppWidgetProvider")) {
+                addHostView(screen2Child,info);
+            }
 
+            if (info.provider.getClassName().equals("com.google.android.keep.homescreenwidget.MemoryAppWidgetProvider")) {
+                addHostView(screen2Child,info);
             }
         }
 

@@ -50,13 +50,6 @@ public class ScreenAdapter extends PagerAdapter{
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View itemView = screens.get(position);
 
-        // Locate the TextViews in viewpager_item.xml
-       // screenName = (TextView) itemView.findViewById(R.id.screenName);
-
-        // Capture position and set to the TextViews
-       // screenName.setText("Screen" + position);
-
-        // Add viewpager_item.xml to ViewPager
         ((ViewPager) container).addView(itemView);
 
         return itemView;
