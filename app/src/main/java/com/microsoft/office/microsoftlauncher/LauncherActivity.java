@@ -1,6 +1,10 @@
 package com.microsoft.office.microsoftlauncher;
 
 import android.app.Activity;
+import android.appwidget.AppWidgetHost;
+import android.appwidget.AppWidgetHostView;
+import android.appwidget.AppWidgetManager;
+import android.appwidget.AppWidgetProviderInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,6 +13,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Layout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +38,11 @@ public class LauncherActivity extends Activity {
     ScreenAdapter adapter;
     String[] screens;
     Intent backgroundService;
+
+    AppWidgetManager appWidgetManager;
+    AppWidgetHost appWidgetHost;
+
+    int APPWIDGET_HOST_ID = 900;
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -40,6 +50,10 @@ public class LauncherActivity extends Activity {
 
         // Get the view from viewpager_main.xml
         setContentView(R.layout.launcher);
+
+        appWidgetManager = AppWidgetManager.getInstance(getBaseContext());
+        appWidgetHost = new AppWidgetHost(this, APPWIDGET_HOST_ID);
+
 
         // Generate sample data
         screens = new String[] { "Work Screen", "Home Screen", "Personal Screen"};
@@ -61,6 +75,23 @@ public class LauncherActivity extends Activity {
         // Binds the Adapter to the ViewPager
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(1);
+
+        List<AppWidgetProviderInfo> widgetList = appWidgetManager.getInstalledProviders();
+
+        RelativeLayout layout = (RelativeLayout)findViewById(R.id.search_bar);
+        //LinearLayout screen2Child = (LinearLayout)findViewById(R.id.screen2);
+
+        for(AppWidgetProviderInfo info : widgetList){
+            //To get the google search box
+            Log.w("Widget", info.provider.getClassName());
+            if(info.provider.getClassName().equals("com.microsoft.clients.bing.widget.BingWidgetProvider")){
+                addHostView(layout, info);
+            }
+
+            if(info.provider.getClassName().equals("com.android.alarmclock.DigitalAppWidgetProvider")) {
+
+            }
+        }
 
         backgroundService = new Intent( this, BackgroundService.class );
         startService(backgroundService);
@@ -89,19 +120,20 @@ public class LauncherActivity extends Activity {
 
                     if( position != 3) {
                         ImageView appIcon = (ImageView) convertView.findViewById(R.id.item_app_icon);
-                        appIcon.setImageDrawable(apps.get(position).icon);
+                        //This line is commented because of the crash bug
+                       // appIcon.setImageDrawable(apps.get(position).icon);
                     }
                     return convertView;
                 }
             };
             gridView.setAdapter(adapter);
-            gridView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent  = getPackageManager().getLaunchIntentForPackage(apps.get(position).name.toString());
-                LauncherActivity.this.startActivity(intent);
-                 }
-        });
+            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent = getPackageManager().getLaunchIntentForPackage(apps.get(position).name.toString());
+                    LauncherActivity.this.startActivity(intent);
+                }
+            });
     }
 
     @Override
@@ -112,6 +144,18 @@ public class LauncherActivity extends Activity {
 
     public void showApps( View view ) {
         Intent intent = new Intent( this, AppsListActivity.class );
-        startActivity( intent );
+        startActivity(intent);
     }
+
+   void addHostView(ViewGroup layout, AppWidgetProviderInfo providerInfo) {
+
+       int id = appWidgetHost.allocateAppWidgetId();
+
+       AppWidgetHostView searchView = appWidgetHost.createView(this, id, providerInfo);
+
+       searchView.setAppWidget(id, providerInfo);
+       layout.addView(searchView);
+
+   }
+
 }
