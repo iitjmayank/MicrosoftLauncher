@@ -1,5 +1,6 @@
 package com.microsoft.office.microsoftlauncher;
 
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -25,6 +26,12 @@ import java.util.List;
 
 
 public class SidebarHandler  {
+
+    private int quickAppListResourceId;
+    public static boolean isInitialized = false;
+    public SidebarHandler(int id) {
+        this.quickAppListResourceId = id;
+    }
     private ListView listView;
     private PackageManager manager;
     private List<AppDetail> apps;
@@ -39,8 +46,8 @@ public class SidebarHandler  {
                 super.onDrawerOpened(drawerView);
                 WindowManager.LayoutParams newParams = new WindowManager.LayoutParams();
                 newParams.copyFrom(params);
-                newParams.width=150;
-               windowManager.updateViewLayout(drawingLayout, newParams);
+                newParams.width = 150;
+                windowManager.updateViewLayout(drawingLayout, newParams);
             }
 
             @Override
@@ -50,17 +57,19 @@ public class SidebarHandler  {
             }
 
         });
+
         loadApps(((View) drawingLayout).getContext());
         loadListView(((View) drawingLayout).getContext());
         addClickListener(((View) drawingLayout).getContext());
         windowManager.addView(drawingLayout, params);
+        isInitialized = true;
     }
 
-    private void loadApps(Context context) {
+    public List<AppDetail> loadApps(Context context) {
         manager = context.getPackageManager();
         apps = new ArrayList<AppDetail>();
 
-        List<String> quickLaunchAppNames = Arrays.asList(context.getResources().getStringArray(R.array.quick_launch_apps));
+        List<String> quickLaunchAppNames = Arrays.asList(context.getResources().getStringArray(quickAppListResourceId));
 
         Intent intent = new Intent(Intent.ACTION_MAIN, null);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -76,6 +85,7 @@ public class SidebarHandler  {
             apps.add(appDetail);
         }
         Collections.sort(apps);
+        return  apps;
     }
 
 

@@ -1,0 +1,16 @@
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"  android:orientation="vertical">
+
+    <GridView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/apps_list"
+        android:columnWidth="85dp"
+        android:numColumns="auto_fit"
+        android:verticalSpacing="6dp"
+        android:horizontalSpacing="6dp"
+        android:stretchMode="columnWidth"
+        android:gravity="center"></GridView>
+
+</GridLayout>

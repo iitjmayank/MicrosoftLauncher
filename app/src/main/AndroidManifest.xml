@@ -16,7 +16,9 @@
         </activity>
 
         <service android:name="BackgroundService" android:exported="true"/>
-
+        <activity android:name=".AppsListActivity"
+            android:theme="@android:style/Theme.Wallpaper.NoTitleBar.Fullscreen">
+        </activity>
     </application>
 
 </manifest>

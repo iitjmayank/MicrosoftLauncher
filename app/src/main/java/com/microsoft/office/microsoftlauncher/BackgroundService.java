@@ -45,6 +45,7 @@ public class BackgroundService extends Service {
         params.gravity = Gravity.RIGHT;
         params.width = CustomDrawerLayout.DEFAULT_WIDTH;
 
-        new SidebarHandler().createHandler(windowManager, params,  layoutInflater);
+        if( SidebarHandler.isInitialized == false)
+        new SidebarHandler(R.array.quick_launch_apps).createHandler(windowManager, params,  layoutInflater);
     }
 }

@@ -2,8 +2,10 @@ package com.microsoft.office.microsoftlauncher;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.support.v4.widget.DrawerLayout;
 import android.util.AttributeSet;
+import android.view.Gravity;
 
 /**
  * Created by kailasl on 3/24/2015.
@@ -32,6 +34,5 @@ public class CustomDrawerLayout extends DrawerLayout {
         heightMeasureSpec = MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(heightMeasureSpec), MeasureSpec.EXACTLY);
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
-
 
 }
