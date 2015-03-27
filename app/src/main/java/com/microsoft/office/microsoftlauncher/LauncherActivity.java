@@ -8,6 +8,8 @@ import android.appwidget.AppWidgetProviderInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -20,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -43,11 +46,35 @@ public class LauncherActivity extends Activity {
     AppWidgetHost appWidgetHost;
 
     int APPWIDGET_HOST_ID = 900;
+
+    Drawable word_icon_id , powerpoint_icon_id;
+
+    final String wordPackageName = "com.microsoft.office.word";
+    final String powerpointPackageName = "com.microsoft.office.powerpoint";
+
+    String[] packageName = {"com.microsoft.office.word","com.microsoft.office.powerpoint"};
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        word_icon_id = getResources().getDrawable(R.drawable.ic_launcher);
+        powerpoint_icon_id = getResources().getDrawable(R.drawable.ic_launcher);
 
+        PackageManager pm = getPackageManager();
+
+
+       try{
+           if (pm.getApplicationIcon(wordPackageName) != null) {
+               word_icon_id = pm.getApplicationIcon(wordPackageName);
+           }
+
+           if (pm.getApplicationIcon(powerpointPackageName) != null) {
+               powerpoint_icon_id = pm.getApplicationIcon(powerpointPackageName);
+           }
+       }catch (PackageManager.NameNotFoundException ne) {
+
+       }
         // Get the view from viewpager_main.xml
         setContentView(R.layout.launcher);
 
@@ -106,7 +133,7 @@ public class LauncherActivity extends Activity {
                 addHostView(work_chid,info);
             }
 
-            if (info.provider.getClassName().equals("flipboard.widget.FlipboardWidgetMedium")) {
+            if (info.provider.getClassName().equals("flipboard.widget.FlipboardWidgetSmall")) {
                 addHostView(personal_child,info);
             }
 
@@ -114,6 +141,25 @@ public class LauncherActivity extends Activity {
                 addHostView(personal_child,info);
             }
         }
+
+        GridView productivityView = (GridView)screen1.findViewById(R.id.productivity_bar);
+        productivityView.setAdapter(new ImageAdapter(this));
+        productivityView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = getPackageManager().getLaunchIntentForPackage(packageName[position]);
+                if (intent!=null) {
+                    startActivity(intent);
+                }
+                else {
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName[position])));
+                    } catch (android.content.ActivityNotFoundException anfe) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName[position])));
+                    }
+                }
+            }
+        });
 
         backgroundService = new Intent( this, BackgroundService.class );
         startService(backgroundService);
@@ -178,6 +224,47 @@ public class LauncherActivity extends Activity {
        searchView.setAppWidget(id, providerInfo);
        layout.addView(searchView);
 
+   }
+
+   class ImageAdapter extends BaseAdapter {
+       private Context mContext;
+
+       public ImageAdapter(Context c) {
+           mContext = c;
+       }
+
+       public int getCount() {
+           return mThumbIds.length;
+       }
+
+       public Object getItem(int position) {
+           return null;
+       }
+
+       public long getItemId(int position) {
+           return 0;
+       }
+
+       public View getView(int position, View convertView, ViewGroup parent) {
+           ImageView imageView;
+           if (convertView == null) {
+               // if it's not recycled, initialize some attributes
+               imageView = new ImageView(mContext);
+              // imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
+               imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+               imageView.setPadding(8, 8, 8, 8);
+           } else {
+               imageView = (ImageView) convertView;
+           }
+
+           imageView.setImageDrawable(mThumbIds[position]);
+           return imageView;
+       }
+
+       // references to our images
+       private Drawable[] mThumbIds = {
+               word_icon_id, powerpoint_icon_id
+       };
    }
 
 }

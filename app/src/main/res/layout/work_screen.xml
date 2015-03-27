@@ -8,5 +8,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/work_chid"/>
+    <GridView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:id="@+id/productivity_bar"
+        android:numColumns="4"
+        android:layout_alignBottom="@id/work_chid"
+        android:gravity="bottom"/>
 
 </RelativeLayout>
