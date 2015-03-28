@@ -8,6 +8,7 @@ import android.appwidget.AppWidgetProviderInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -44,37 +45,27 @@ public class LauncherActivity extends Activity {
 
     AppWidgetManager appWidgetManager;
     AppWidgetHost appWidgetHost;
+    PackageManager pm;
 
     int APPWIDGET_HOST_ID = 900;
+    int AppCount = 4;
+    Drawable appIcon[] = new Drawable[AppCount];
 
-    Drawable word_icon_id , powerpoint_icon_id;
-
-    final String wordPackageName = "com.microsoft.office.word";
-    final String powerpointPackageName = "com.microsoft.office.powerpoint";
-
-    String[] packageName = {"com.microsoft.office.word","com.microsoft.office.powerpoint"};
+    String[] packageName = {"com.microsoft.office.word","com.microsoft.office.excel", "com.microsoft.office.powerpoint","com.microsoft.office.lync15"};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        word_icon_id = getResources().getDrawable(R.drawable.ic_launcher);
-        powerpoint_icon_id = getResources().getDrawable(R.drawable.ic_launcher);
+        appIcon[0] = getResources().getDrawable(R.drawable.ic_launcher);
+        appIcon[1] = getResources().getDrawable(R.drawable.ic_launcher);
+        appIcon[2] = getResources().getDrawable(R.drawable.ic_launcher);
+        appIcon[3] = getResources().getDrawable(R.drawable.ic_launcher);
 
-        PackageManager pm = getPackageManager();
+        pm = getPackageManager();
 
-
-       try{
-           if (pm.getApplicationIcon(wordPackageName) != null) {
-               word_icon_id = pm.getApplicationIcon(wordPackageName);
-           }
-
-           if (pm.getApplicationIcon(powerpointPackageName) != null) {
-               powerpoint_icon_id = pm.getApplicationIcon(powerpointPackageName);
-           }
-       }catch (PackageManager.NameNotFoundException ne) {
-
-       }
+        //Set AppIcon value if Installed
+        setAppIcon();
         // Get the view from viewpager_main.xml
         setContentView(R.layout.launcher);
 
@@ -186,10 +177,10 @@ public class LauncherActivity extends Activity {
                         }
                     }
 
-                    if( position != 3) {
+                    if( position != mid) {
                         ImageView appIcon = (ImageView) convertView.findViewById(R.id.item_app_icon);
                         //This line is commented because of the crash bug
-                       // appIcon.setImageDrawable(apps.get(position).icon);
+                        appIcon.setImageDrawable(apps.get(position).icon);
                     }
                     return convertView;
                 }
@@ -234,7 +225,7 @@ public class LauncherActivity extends Activity {
        }
 
        public int getCount() {
-           return mThumbIds.length;
+           return appIcon.length;
        }
 
        public Object getItem(int position) {
@@ -250,21 +241,29 @@ public class LauncherActivity extends Activity {
            if (convertView == null) {
                // if it's not recycled, initialize some attributes
                imageView = new ImageView(mContext);
-              // imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
-               imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-               imageView.setPadding(8, 8, 8, 8);
+
+               //imageView.setPadding(8, 8, 8, 8);
            } else {
                imageView = (ImageView) convertView;
            }
 
-           imageView.setImageDrawable(mThumbIds[position]);
+           imageView.setImageDrawable(appIcon[position]);
            return imageView;
        }
+   }
 
-       // references to our images
-       private Drawable[] mThumbIds = {
-               word_icon_id, powerpoint_icon_id
-       };
+   void setAppIcon() {
+       for (int i = 0; i< AppCount; i++) {
+           try{
+               if (pm.getApplicationIcon(packageName[i]) != null) {
+                   Log.w("PackageManager", packageName[i]);
+                   appIcon[i] = pm.getApplicationIcon(packageName[i]);
+
+               }
+           }catch (PackageManager.NameNotFoundException ne) {
+
+           }
+       }
    }
 
 }
