@@ -1,6 +1,9 @@
 package com.microsoft.office.microsoftlauncher;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetHost;
 import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetManager;
@@ -12,6 +15,7 @@ import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -51,7 +55,7 @@ public class LauncherActivity extends Activity {
     int AppCount = 4;
     Drawable appIcon[] = new Drawable[AppCount];
 
-    String[] packageName = {"com.microsoft.office.word","com.microsoft.office.excel", "com.microsoft.office.powerpoint","com.microsoft.office.lync15"};
+    final static String[] packageName = {"com.microsoft.office.word","com.microsoft.office.excel", "com.microsoft.office.powerpoint","com.microsoft.office.lync15"};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -155,6 +159,15 @@ public class LauncherActivity extends Activity {
         backgroundService = new Intent( this, BackgroundService.class );
         startService(backgroundService);
         loadApplicationBar();
+
+        ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> processInfo = activityManager.getRunningAppProcesses();
+        for(int i = 0; i < processInfo.size(); i++)
+        {
+            if(processInfo.get(i).processName.equals("com.google.android.apps.docs.editors.docs")) {
+                sendNotification(LauncherActivity.packageName[0], "word");
+            }
+        }
     }
 
     private void loadApplicationBar() {
@@ -265,5 +278,32 @@ public class LauncherActivity extends Activity {
            }
        }
    }
+
+    void sendNotification(String packageName, String applicationName ) {
+
+        // Toast.makeText(getApplicationContext(), "Chrome browser is running", Toast.LENGTH_LONG).show();
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+
+        // Set to word icon
+        builder.setSmallIcon(R.drawable.ic_launcher);
+        builder.setContentTitle("Install " + applicationName);
+        builder.setContentText("Try Microsoft " + applicationName+"! Tap to install");
+
+        builder.setAutoCancel(true);
+        //Pull out the packagenames for the apps you want user to install
+        // final String appPackageName = "com.microsoft.amp.apps.bingnews"; // Can also use getPackageName(), as below
+
+        //Create intent to launch the package
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        //Add the above intent to pending itent
+        PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        builder.setContentIntent(pIntent);
+
+        NotificationManager manager = (NotificationManager) getSystemService(this.NOTIFICATION_SERVICE);
+        manager.notify(100, builder.build());
+        // startActivity(intent);
+    }
 
 }
