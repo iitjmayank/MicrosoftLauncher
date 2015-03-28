@@ -22,7 +22,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"
         android:id="@+id/application_bar"
-        android:numColumns="7"
         >
     </GridView>
 

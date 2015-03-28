@@ -164,6 +164,7 @@ public class LauncherActivity extends Activity {
           final List<AppDetail> apps = sidebarHandler.loadApps(getApplicationContext());
           final int mid = apps.size()/2;
           apps.add(mid, null); // Mid position will have apps button
+        gridView.setNumColumns(apps.size());
           ArrayAdapter<AppDetail> adapter = new ArrayAdapter<AppDetail>(this, R.layout.list_item, apps) {
                 @Override
                 public View getView(int position, View convertView, ViewGroup parent) {
@@ -179,7 +180,6 @@ public class LauncherActivity extends Activity {
 
                     if( position != mid) {
                         ImageView appIcon = (ImageView) convertView.findViewById(R.id.item_app_icon);
-                        //This line is commented because of the crash bug
                         appIcon.setImageDrawable(apps.get(position).icon);
                     }
                     return convertView;
