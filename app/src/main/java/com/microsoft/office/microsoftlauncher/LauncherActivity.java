@@ -160,6 +160,10 @@ public class LauncherActivity extends Activity {
         startService(backgroundService);
         loadApplicationBar();
 
+        NotifyIfGoogleDocUsed();
+    }
+
+    void NotifyIfGoogleDocUsed() {
         ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> processInfo = activityManager.getRunningAppProcesses();
         for(int i = 0; i < processInfo.size(); i++)
@@ -168,6 +172,12 @@ public class LauncherActivity extends Activity {
                 sendNotification(LauncherActivity.packageName[0], "word");
             }
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        NotifyIfGoogleDocUsed();
     }
 
     private void loadApplicationBar() {
