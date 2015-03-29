@@ -61,10 +61,10 @@ public class LauncherActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        appIcon[0] = getResources().getDrawable(R.drawable.ic_launcher);
-        appIcon[1] = getResources().getDrawable(R.drawable.ic_launcher);
-        appIcon[2] = getResources().getDrawable(R.drawable.ic_launcher);
-        appIcon[3] = getResources().getDrawable(R.drawable.ic_launcher);
+        appIcon[0] = getResources().getDrawable(R.drawable.wordnotinstalled);
+        appIcon[1] = getResources().getDrawable(R.drawable.excelnotinstalled);
+        appIcon[2] = getResources().getDrawable(R.drawable.powerpointnotinstalled);
+        appIcon[3] = getResources().getDrawable(R.drawable.wordnotinstalled);
 
         pm = getPackageManager();
 
@@ -295,7 +295,7 @@ public class LauncherActivity extends Activity {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
 
         // Set to word icon
-        builder.setSmallIcon(R.drawable.ic_launcher);
+        builder.setSmallIcon(R.drawable.wordnotinstalled);
         builder.setContentTitle("Install " + applicationName);
         builder.setContentText("Try Microsoft " + applicationName+"! Tap to install");
 
