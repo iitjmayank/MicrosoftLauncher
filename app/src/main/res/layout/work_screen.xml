@@ -10,13 +10,13 @@
         <!--calendar-->
         <TableRow>
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="300dp"
+                android:layout_height="250dp"
                 android:orientation="vertical"
                 android:id="@+id/calendar"/>
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="300dp"
+                android:layout_height="250dp"
                 android:orientation="vertical"
                 android:id="@+id/outlook"/>
         </TableRow>
@@ -24,7 +24,7 @@
         <TableRow>
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="300dp"
                 android:orientation="vertical"
                 android:id="@+id/recent_files"/>
         </TableRow>
