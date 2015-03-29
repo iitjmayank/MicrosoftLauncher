@@ -2,6 +2,8 @@
     package="com.microsoft.office.microsoftlauncher">
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application android:allowBackup="true" android:label="@string/app_name"
         android:icon="@mipmap/ic_launcher" android:theme="@style/AppTheme">
 
@@ -22,7 +24,7 @@
             android:theme="@android:style/Theme.Wallpaper.NoTitleBar.Fullscreen">
         </activity>
 
-        <receiver android:name=".WidgetProvider" >
+        <receiver android:name=".WidgetProvider" android:label="Recent WXP Files" >
             <intent-filter>
 
                 <!-- This widget provider receives broadcast with following action name or simply onUpdate of AppWidgetProvider is called -->
@@ -32,7 +34,17 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widgetinfo" />
+
         </receiver>
+
+        <receiver android:name=".MainWidget" android:label="Microsoft Weather">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/weather_widget_info" />
+        </receiver>
+
 
         <service
             android:name=".WidgetService"

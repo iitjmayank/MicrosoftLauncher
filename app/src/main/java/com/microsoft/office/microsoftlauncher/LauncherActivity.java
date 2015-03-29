@@ -152,6 +152,10 @@ public class LauncherActivity extends Activity {
             if (info.provider.getClassName().equals("com.microsoft.office.microsoftlauncher.WidgetProvider")) {
                 addHostView(personal_child,info, true);
             }
+
+            if (info.provider.getClassName().equals("com.microsoft.office.microsoftlauncher.MainWidget")) {
+                addHostView(personal_child,info, true);
+            }
         }
 
         GridView productivityView = (GridView)screen1.findViewById(R.id.productivity_bar);
