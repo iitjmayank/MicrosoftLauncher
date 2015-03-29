@@ -17,6 +17,7 @@
         </TableRow>
 
         <TableRow>
+
             <GridView
                 android:layout_marginTop="20dp"
                 android:layout_width="wrap_content"
@@ -24,6 +25,8 @@
                 android:gravity="left"
                 android:id="@+id/productivity_bar"
                 android:numColumns="4"/>
+
+
         </TableRow>
         </TableLayout>
 

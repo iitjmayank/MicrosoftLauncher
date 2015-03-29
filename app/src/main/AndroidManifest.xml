@@ -7,7 +7,8 @@
         <activity android:name=".LauncherActivity"
             android:launchMode="singleTask"
             android:stateNotNeeded="true"
-            android:theme="@android:style/Theme.Wallpaper.NoTitleBar" >
+            android:theme="@android:style/Theme.Wallpaper.NoTitleBar"
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.HOME" />
