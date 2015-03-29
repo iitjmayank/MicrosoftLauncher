@@ -136,6 +136,10 @@ public class LauncherActivity extends Activity {
             if (info.provider.getClassName().equals("com.facebook.katana.FacebookWidgetProvider")) {
                 addHostView(personal_child,info);
             }
+
+            if (info.provider.getClassName().equals("WidgetProvider")) {
+                addHostView(personal_child,info);
+            }
         }
 
         GridView productivityView = (GridView)screen1.findViewById(R.id.productivity_bar);
