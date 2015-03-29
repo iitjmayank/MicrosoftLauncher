@@ -3,6 +3,7 @@ package com.microsoft.office.microsoftlauncher;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -141,6 +142,11 @@ public class ListProvider implements RemoteViewsFactory {
             remoteView.setImageViewResource(R.id.imageView, R.drawable.ic_excel);
         }
 
+        Bundle extras = new Bundle();
+        extras.putString(WidgetProvider.FILE_PATH, listItem.getAbsolutePath());
+        Intent fillIntent = new Intent();
+        fillIntent.putExtras(extras);
+        remoteView.setOnClickFillInIntent(R.id.recent_file_item, fillIntent);
         return remoteView;
 	}
 
