@@ -15,7 +15,7 @@
         android:id="@+id/item_app_label"
         android:layout_below="@id/item_app_icon"
         android:layout_alignParentLeft="true"
-        android:textColor="@android:color/background_dark"
+        android:textColor="@android:color/white"
         android:textStyle="bold"/>
 
 </RelativeLayout>
