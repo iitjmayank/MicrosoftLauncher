@@ -8,13 +8,16 @@ import android.appwidget.AppWidgetHost;
 import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProviderInfo;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.content.FileProvider;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.PagerAdapter;
@@ -146,8 +149,8 @@ public class LauncherActivity extends Activity {
                 addHostView(personal_child,info, true);
             }
 
-            if (info.provider.getClassName().equals("WidgetProvider")) {
-                addHostView(personal_child,info, false);
+            if (info.provider.getClassName().equals("com.microsoft.office.microsoftlauncher.WidgetProvider")) {
+                addHostView(personal_child,info, true);
             }
         }
 
@@ -243,7 +246,7 @@ public class LauncherActivity extends Activity {
         startActivity(intent);
     }
 
-   void addHostView(final ViewGroup layout, final AppWidgetProviderInfo providerInfo, final boolean replacable) {
+   int addHostView(final ViewGroup layout, final AppWidgetProviderInfo providerInfo, final boolean replacable) {
 
        int id = appWidgetHost.allocateAppWidgetId();
 
@@ -264,6 +267,7 @@ public class LauncherActivity extends Activity {
            });
        }
        appWidgetHost.startListening();
+    return id;
    }
 
    class ImageAdapter extends BaseAdapter {
@@ -340,12 +344,9 @@ public class LauncherActivity extends Activity {
         if (resultCode == RESULT_OK ) {
             if (requestCode == REQUEST_PICK_APPWIDGET) {
                 addWidgetAdapter.configureWidget(data);
-
-            }
-            else if (requestCode == REQUEST_CREATE_APPWIDGET) {
+            } else  {
                 addWidgetAdapter.createWidget(data);
             }
-
         }
         else if (resultCode == RESULT_CANCELED && data != null) {
             int appWidgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);

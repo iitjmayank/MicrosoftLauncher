@@ -43,6 +43,7 @@ public class AddWidgetAdapter {
         addEmptyData(pickIntent);
         workingActivity.startActivityForResult(pickIntent, R.id.REQUEST_PICK_APPWIDGET);
     }
+
     void addEmptyData(Intent pickIntent) {
         ArrayList customInfo = new ArrayList();
         pickIntent.putParcelableArrayListExtra(AppWidgetManager.EXTRA_CUSTOM_INFO, customInfo);
