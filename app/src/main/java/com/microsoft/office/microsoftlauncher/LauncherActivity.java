@@ -199,6 +199,11 @@ public class LauncherActivity extends Activity {
     }
 
     @Override
+    public void onBackPressed() {
+        //Do Nothing
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         NotifyIfGoogleDocUsed();
