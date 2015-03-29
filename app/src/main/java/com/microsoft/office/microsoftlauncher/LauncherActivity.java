@@ -50,6 +50,7 @@ public class LauncherActivity extends Activity {
     AppWidgetManager appWidgetManager;
     AppWidgetHost appWidgetHost;
     PackageManager pm;
+    LayoutInflater inflater;
 
     int APPWIDGET_HOST_ID = 900;
     int AppCount = 4;
@@ -79,7 +80,7 @@ public class LauncherActivity extends Activity {
         // Locate the ViewPager in viewpager_main.xml
         viewPager = (ViewPager) findViewById(R.id.pager);
 
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         adapter = new ScreenAdapter(LauncherActivity.this);
 
         View screen1 = inflater.inflate(R.layout.work_screen, null,
@@ -263,7 +264,9 @@ public class LauncherActivity extends Activity {
            ImageView imageView;
            if (convertView == null) {
                // if it's not recycled, initialize some attributes
-               imageView = new ImageView(mContext);
+               View view = inflater.inflate(R.layout.list_item, null,
+                       false);
+               imageView = (ImageView) view.findViewById(R.id.item_app_icon);
 
                //imageView.setPadding(8, 8, 8, 8);
            } else {
