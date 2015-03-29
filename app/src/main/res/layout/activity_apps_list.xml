@@ -8,9 +8,11 @@
         android:id="@+id/apps_list"
         android:columnWidth="85dp"
         android:numColumns="auto_fit"
-        android:verticalSpacing="6dp"
-        android:horizontalSpacing="6dp"
+        android:verticalSpacing="20dp"
+        android:horizontalSpacing="20dp"
         android:stretchMode="columnWidth"
-        android:gravity="center"></GridView>
+        android:gravity="center"
+        android:background="@android:color/black"
+        android:padding="10dp"/>
 
 </GridLayout>

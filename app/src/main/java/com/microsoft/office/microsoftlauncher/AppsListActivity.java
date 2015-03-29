@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.ScaleDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -18,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -53,6 +56,13 @@ public class AppsListActivity extends Activity {
             appDetail.icon = ri.activityInfo.loadIcon( manager );
             apps.add(appDetail);
         }
+
+        Collections.sort(apps, new Comparator<AppDetail>() {
+            @Override
+            public int compare(AppDetail lhs, AppDetail rhs) {
+                return lhs.label.toString().compareTo(rhs.label.toString());
+            }
+        });
     }
 
     private GridView gridView;
@@ -74,6 +84,7 @@ public class AppsListActivity extends Activity {
                 return convertView;
             }
         };
+
         gridView.setAdapter(adapter);
     }
 
