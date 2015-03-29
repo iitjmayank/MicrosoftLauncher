@@ -53,7 +53,6 @@ public class LauncherActivity extends Activity {
     public static int REQUEST_CREATE_APPWIDGET = 2131361794;
     ViewPager viewPager;
     ScreenAdapter adapter;
-    String[] screens;
     Intent backgroundService;
 
     AppWidgetManager appWidgetManager;
@@ -68,7 +67,7 @@ public class LauncherActivity extends Activity {
     final static String[] packageName = {"com.microsoft.office.word","com.microsoft.office.excel", "com.microsoft.office.powerpoint","com.microsoft.office.lync15"};
 
     LinearLayout screen2Child;
-    LinearLayout work_chid;
+    LinearLayout calendar, recent_files, outlook, weather;
     LinearLayout personal_child;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -115,8 +114,12 @@ public class LauncherActivity extends Activity {
 
         RelativeLayout layout = (RelativeLayout)findViewById(R.id.search_bar);
         screen2Child = (LinearLayout)screen2.findViewById(R.id.screen2);
-        work_chid = (LinearLayout) screen1.findViewById(R.id.work_chid);
+        calendar = (LinearLayout) screen1.findViewById(R.id.calendar);
+        outlook = (LinearLayout) screen1.findViewById(R.id.outlook);
+        weather = (LinearLayout) screen2.findViewById(R.id.weather);
+        recent_files = (LinearLayout)screen1.findViewById(R.id.recent_files);
         personal_child = (LinearLayout) screen3.findViewById(R.id.personal_child);
+
 
         for(AppWidgetProviderInfo info : widgetList){
             //To get the google search box
@@ -134,11 +137,11 @@ public class LauncherActivity extends Activity {
             }
 
             if (info.provider.getClassName().equals("com.android.calendar.widget.CalendarAppWidgetProvider")) {
-                addHostView(work_chid,info, true);
+                addHostView(calendar,info, true);
             }
 
             if (info.provider.getClassName().equals("com.acompli.acompli.InboxWidgetProvider")) {
-                addHostView(work_chid,info, true);
+                addHostView(outlook,info, true);
             }
 
             if (info.provider.getClassName().equals("flipboard.widget.FlipboardWidgetSmall")) {
@@ -150,11 +153,11 @@ public class LauncherActivity extends Activity {
             }
 
             if (info.provider.getClassName().equals("com.microsoft.office.microsoftlauncher.WidgetProvider")) {
-                addHostView(personal_child,info, true);
+                addHostView(recent_files,info, true);
             }
 
             if (info.provider.getClassName().equals("com.microsoft.office.microsoftlauncher.MainWidget")) {
-                addHostView(personal_child,info, true);
+                addHostView(weather,info, true);
             }
         }
 
