@@ -83,7 +83,6 @@ public class WidgetProvider extends AppWidgetProvider {
             fileOpenIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             String mimetype = MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(filePath));
             fileOpenIntent.setDataAndType(uriPath, mimetype);
-            fileOpenIntent.setType(mimetype);
             context.startActivity(fileOpenIntent);
         }
        super.onReceive(context,intent);
