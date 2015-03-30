@@ -51,6 +51,7 @@ public class LauncherActivity extends Activity {
     private static Map<Integer, AddWidgetAdapter> widgetAdapterMap = new HashMap<>();
     public static int REQUEST_PICK_APPWIDGET = 501;
     public static int REQUEST_CREATE_APPWIDGET = 2131361794;
+    public static LinearLayout bingBar;
     private static Map<String, View> screenMap = new HashMap<>();
     ViewPager viewPager;
     ScreenAdapter adapter;
@@ -112,8 +113,7 @@ public class LauncherActivity extends Activity {
             screen2 = inflater.inflate(R.layout.screen, null,
                     false);
             screenMap.put("Screen2", screen2);
-
-             screen3 = inflater.inflate(R.layout.personal_screen, null,
+            screen3 = inflater.inflate(R.layout.personal_screen, null,
                     false);
             screenMap.put("Screen3", screen3);
         }
@@ -122,6 +122,7 @@ public class LauncherActivity extends Activity {
         adapter.addScreen(screen1);
         adapter.addScreen(screen2);
         adapter.addScreen(screen3);
+
         // Binds the Adapter to the ViewPager
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(1);
@@ -130,24 +131,28 @@ public class LauncherActivity extends Activity {
         loadApplicationBar();
 
         NotifyIfGoogleDocUsed();
-        if( savedInstanceState!= null && savedInstanceState.getBoolean("Created") )
-            return;
+        LinearLayout bingBarLayout = (LinearLayout)findViewById(R.id.bing_bar);
+
         List<AppWidgetProviderInfo> widgetList = appWidgetManager.getInstalledProviders();
 
-        RelativeLayout layout = (RelativeLayout)findViewById(R.id.search_bar);
-        screen2Child = (LinearLayout)screen2.findViewById(R.id.screen2);
-        calendar = (LinearLayout) screen1.findViewById(R.id.calendar);
-        outlook = (LinearLayout) screen1.findViewById(R.id.outlook);
-        weather = (LinearLayout) screen2.findViewById(R.id.weather);
-        recent_files = (LinearLayout)screen1.findViewById(R.id.recent_files);
-        personal_child = (LinearLayout) screen3.findViewById(R.id.personal_child);
-
+        if( savedInstanceState == null || !savedInstanceState.getBoolean("Created") ) {
+            screen2Child = (LinearLayout) screen2.findViewById(R.id.screen2);
+            calendar = (LinearLayout) screen1.findViewById(R.id.calendar);
+            outlook = (LinearLayout) screen1.findViewById(R.id.outlook);
+            weather = (LinearLayout) screen2.findViewById(R.id.weather);
+            recent_files = (LinearLayout) screen1.findViewById(R.id.recent_files);
+            personal_child = (LinearLayout) screen3.findViewById(R.id.personal_child);
+//            bingBar = (LinearLayout) getLayoutInflater().inflate(R.layout.bing_bar, null);
+        }
 
         for(AppWidgetProviderInfo info : widgetList){
             //To get the google search box
             Log.w("Widget", info.provider.getClassName());
             if(info.provider.getClassName().equals("com.microsoft.clients.bing.widget.BingWidgetProvider")){
-                addHostView(layout, info, true);
+                addHostView(bingBarLayout, info, true);
+            }
+            if( savedInstanceState!= null && savedInstanceState.getBoolean("Created") ) {
+                continue;
             }
 
             if(info.provider.getClassName().equals("com.android.alarmclock.DigitalAppWidgetProvider")) {
@@ -205,6 +210,9 @@ public class LauncherActivity extends Activity {
 
     }
 
+    public void addBingWidget(View view) {
+
+    }
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putBoolean("Created", true);
