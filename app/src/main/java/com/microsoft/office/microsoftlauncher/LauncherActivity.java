@@ -51,6 +51,7 @@ public class LauncherActivity extends Activity {
     private static Map<Integer, AddWidgetAdapter> widgetAdapterMap = new HashMap<>();
     public static int REQUEST_PICK_APPWIDGET = 501;
     public static int REQUEST_CREATE_APPWIDGET = 2131361794;
+    private static Map<String, View> screenMap = new HashMap<>();
     ViewPager viewPager;
     ScreenAdapter adapter;
     String[] screens;
@@ -70,10 +71,18 @@ public class LauncherActivity extends Activity {
     LinearLayout screen2Child;
     LinearLayout work_chid;
     LinearLayout personal_child;
+
+    View screen1;
+    View screen2;
+    View screen3;
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        appWidgetManager = AppWidgetManager.getInstance(getBaseContext());
+        appWidgetHost = new AppWidgetHost(this, R.id.APPWIDGET_HOST_ID);
+
         appIcon[0] = getResources().getDrawable(R.drawable.wordnotinstalled);
         appIcon[1] = getResources().getDrawable(R.drawable.excelnotinstalled);
         appIcon[2] = getResources().getDrawable(R.drawable.powerpointnotinstalled);
@@ -86,31 +95,44 @@ public class LauncherActivity extends Activity {
         // Get the view from viewpager_main.xml
         setContentView(R.layout.launcher);
 
-        appWidgetManager = AppWidgetManager.getInstance(getBaseContext());
-        appWidgetHost = new AppWidgetHost(this, R.id.APPWIDGET_HOST_ID);
-
         // Locate the ViewPager in viewpager_main.xml
         viewPager = (ViewPager) findViewById(R.id.pager);
 
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         adapter = new ScreenAdapter(LauncherActivity.this);
 
-        View screen1 = inflater.inflate(R.layout.work_screen, null,
-                false);
+        if( savedInstanceState!= null && savedInstanceState.getBoolean("Created")) {
+            screen1 = screenMap.get("Screen1");
+            screen2 = screenMap.get("Screen2");
+            screen3 = screenMap.get("Screen3");
+        }
+        else {
+            screen1 = inflater.inflate(R.layout.work_screen, null,
+                    false);
+            screenMap.put("Screen1", screen1);
+            screen2 = inflater.inflate(R.layout.screen, null,
+                    false);
+            screenMap.put("Screen2", screen2);
+
+             screen3 = inflater.inflate(R.layout.personal_screen, null,
+                    false);
+            screenMap.put("Screen3", screen3);
+        }
 
         // Pass results to ViewPagerAdapter Class
         adapter.addScreen(screen1);
-        View screen2 = inflater.inflate(R.layout.screen, null,
-                false);
         adapter.addScreen(screen2);
-
-        View screen3 = inflater.inflate(R.layout.personal_screen, null,
-                false);
         adapter.addScreen(screen3);
         // Binds the Adapter to the ViewPager
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(1);
+        backgroundService = new Intent( this, BackgroundService.class );
+        startService(backgroundService);
+        loadApplicationBar();
 
+        NotifyIfGoogleDocUsed();
+        if( savedInstanceState!= null && savedInstanceState.getBoolean("Created") )
+            return;
         List<AppWidgetProviderInfo> widgetList = appWidgetManager.getInstalledProviders();
 
         RelativeLayout layout = (RelativeLayout)findViewById(R.id.search_bar);
@@ -177,12 +199,15 @@ public class LauncherActivity extends Activity {
             }
         });
 
-        backgroundService = new Intent( this, BackgroundService.class );
-        startService(backgroundService);
-        loadApplicationBar();
 
-        NotifyIfGoogleDocUsed();
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean("Created", true);
+        super.onSaveInstanceState(outState);
+    }
+
 
     void NotifyIfGoogleDocUsed() {
         ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
